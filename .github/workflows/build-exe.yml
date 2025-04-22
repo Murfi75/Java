@@ -1,0 +1,42 @@
+name: Build EXE with GraalVM
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          native-image: true
+
+      - name: Compile Java sources
+        run: |
+          mkdir -p out
+          javac -d out src/com/vlados/inc/vlados/*.java
+
+      - name: Create JAR file
+        run: |
+          cd out
+          jar cfe VladOS.jar com.vlados.inc.vlados.Main com/vlados/inc/vlados/*.class
+          cd ..
+
+      - name: Build native EXE
+        run: |
+          native-image -jar out/VladOS.jar --no-fallback -H:Name=VladOS
+
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: VladOS-windows
+          path: VladOS.exe
