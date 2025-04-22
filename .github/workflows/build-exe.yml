@@ -23,7 +23,7 @@ jobs:
       - name: Compile Java sources
         run: |
           mkdir -p out
-          javac -d out src/com/vlados/inc/vlados/*.java
+          javac -d out src/main/java/com/vlados/inc/vlados/*.java
 
       - name: Create JAR file
         run: |
