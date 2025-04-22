@@ -36,7 +36,7 @@ jobs:
           native-image -jar out/VladOS.jar --no-fallback -H:Name=VladOS
 
       - name: Upload EXE artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: VladOS-windows
           path: VladOS.exe
